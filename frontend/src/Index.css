@@ -1,0 +1,38 @@
+/* 1. SARI IMPORTS SABSE UPAR BINAA KISI COMMENT KE */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@100;200;400&display=swap');
+@import "tailwindcss";
+
+/* 2. THEME CONFIGURATION */
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+/* 3. GLOBAL STYLES */
+html, body {
+  background-color: #000000;
+  color: white;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar styling (Nevo Aesthetic) */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+}

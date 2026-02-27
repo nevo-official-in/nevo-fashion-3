@@ -1,0 +1,142 @@
+{
+  "project_name": "NEVO - Industrial Luxury Store",
+  "design_philosophy": {
+    "aesthetic": "Industrial Luxury",
+    "core_principles": [
+      "Jet Black Void: The background is always #000000. No dark greys as main backgrounds.",
+      "Pure White Typography: Text is #FFFFFF. Contrast is the main decoration.",
+      "Industrial Rawness: Use visible grids, monospaced data labels, and technical aesthetics.",
+      "Cinematic Motion: Elements do not just appear; they slide, fade, and reveal like a movie title."
+    ],
+    "mood_keywords": ["Brutalist", "High-Fidelity", "Monochrome", "Subversive"]
+  },
+  "typography": {
+    "font_family": {
+      "heading": "Syne, sans-serif",
+      "body": "Space Grotesk, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "display": "text-8xl font-bold tracking-tighter uppercase",
+      "h1": "text-6xl font-bold tracking-tight uppercase",
+      "h2": "text-4xl font-semibold tracking-tight uppercase",
+      "h3": "text-2xl font-medium uppercase",
+      "body": "text-base font-normal leading-relaxed",
+      "label": "text-xs font-mono tracking-widest uppercase text-neutral-400"
+    },
+    "instructions": "Import 'Syne', 'Space Grotesk', and 'JetBrains Mono' from Google Fonts. Do NOT use Inter."
+  },
+  "colors": {
+    "palette": {
+      "background": "#000000",
+      "foreground": "#FFFFFF",
+      "card": "#0A0A0A",
+      "card_foreground": "#FFFFFF",
+      "border": "#222222",
+      "primary": "#FFFFFF",
+      "primary_foreground": "#000000",
+      "muted": "#1A1A1A",
+      "muted_foreground": "#888888",
+      "accent": "#FF3300",
+      "error": "#FF0000"
+    },
+    "usage_rules": {
+      "background": "ALWAYS #000000. Never use light mode.",
+      "borders": "1px solid #222222. Sharp edges, no rounded corners (except pill buttons).",
+      "gradients": "FORBIDDEN. Use solid flat colors or noise textures only."
+    }
+  },
+  "layout_and_spacing": {
+    "grid_system": "12-column grid. Use 'grid-cols-4' (mobile) to 'grid-cols-12' (desktop).",
+    "spacing_scale": {
+      "section_padding": "py-32",
+      "element_gap": "gap-8",
+      "container_padding": "px-6 md:px-12"
+    },
+    "border_radius": {
+      "default": "0px",
+      "button": "9999px (Pill shape) OR 0px (Sharp)",
+      "card": "0px"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-white text-black hover:bg-neutral-200 transition-colors uppercase font-bold tracking-widest text-sm px-8 py-4 rounded-none",
+      "secondary": "border border-white/20 text-white hover:bg-white hover:text-black transition-colors uppercase font-bold tracking-widest text-sm px-8 py-4 rounded-none",
+      "link": "text-neutral-400 hover:text-white underline decoration-1 underline-offset-4"
+    },
+    "cards": {
+      "product_card": "group relative bg-transparent border border-white/10 overflow-hidden hover:border-white/30 transition-colors",
+      "interaction": "On hover, the product image MUST cycle through 3 distinct angles (Front, Side, Back) using opacity cross-fades."
+    },
+    "navigation": {
+      "style": "Fixed minimal header. Logo left, Cart right. Menu hidden in a 'Slide-out Drawer'.",
+      "drawer": "Full height, jet black, covering 50% of screen on desktop. Large typography links."
+    },
+    "marquee": {
+      "style": "Infinite horizontal scroll. Huge outlined text. 'NEVO DROP 001 AVAILABLE NOW'."
+    }
+  },
+  "motion": {
+    "library": "framer-motion",
+    "defaults": {
+      "transition": { "duration": 0.8, "ease": [0.16, 1, 0.3, 1] },
+      "hover": { "scale": 1.02, "opacity": 0.9 }
+    },
+    "scroll_reveal": "Elements fade in and slide up (y: 20 -> y: 0) as they enter viewport."
+  },
+  "image_urls": {
+    "hero_background": "https://images.unsplash.com/photo-1754639347079-d8d8aa8c99f6?q=80&w=2070&auto=format&fit=crop",
+    "manifesto_texture": "https://images.pexels.com/photos/5843172/pexels-photo-5843172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "categories": {
+      "oversized": "https://images.pexels.com/photos/18956666/pexels-photo-18956666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      "essentials": "https://images.unsplash.com/photo-1763750581767-b367bcd6c117?q=80&w=1887&auto=format&fit=crop",
+      "accessories": "https://images.unsplash.com/photo-1612011213611-ff46ab689475?q=80&w=1887&auto=format&fit=crop"
+    },
+    "products": [
+      {
+        "name": "VOID HOODIE",
+        "price": 250,
+        "images": [
+          "https://images.pexels.com/photos/18956666/pexels-photo-18956666.jpeg",
+          "https://images.unsplash.com/photo-1648320397369-85ab3fa368bc?q=80&w=1887&auto=format&fit=crop",
+          "https://images.pexels.com/photos/7479825/pexels-photo-7479825.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        ]
+      },
+      {
+        "name": "INDUSTRIAL TEE",
+        "price": 120,
+        "images": [
+          "https://images.unsplash.com/photo-1762575910569-46971cd69df3?q=80&w=1887&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1742548635624-02f0008b5027?q=80&w=1887&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1763750581767-b367bcd6c117?q=80&w=1887&auto=format&fit=crop"
+        ]
+      },
+      {
+        "name": "CHROME CHAIN",
+        "price": 850,
+        "images": [
+          "https://images.unsplash.com/photo-1612011213611-ff46ab689475?q=80&w=1887&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1693910907642-d498cb0725b0?q=80&w=1887&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1692261605647-55ec75a9e201?q=80&w=1887&auto=format&fit=crop"
+        ]
+      }
+    ]
+  },
+  "implementation_notes": {
+    "tailwind_v4": "Use @theme directive in index.css for variables. Example: --color-background: #000000;",
+    "react_helmet": "Add <Helmet> in App.js or Layout to set title 'NEVO | Industrial Luxury'.",
+    "zustand_persist": "Use 'persist' middleware for 'cart-storage'.",
+    "skeleton": "Create a <Skeleton> component with 'bg-neutral-900 animate-pulse' style.",
+    "guest_checkout": "Bypass auth. Collect email in shipping form directly."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do NOT use gradients. Solid colors only.",
+    "Do NOT use rounded corners greater than 4px, unless it is a Pill button.",
+    "Do NOT use 'Inter' font. Use 'Syne' for Headings and 'Space Grotesk' for body.",
+    "The background must be #000000 (Jet Black), not dark grey.",
+    "Use 'sonner' for toast notifications.",
+    "All interactive elements must have 'data-testid'.",
+    "Ensure the 'ProductCard' cycles images on hover every 800ms."
+  ]
+}
