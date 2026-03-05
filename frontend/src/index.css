@@ -1,38 +1,61 @@
-/* 1. SARI IMPORTS SABSE UPAR BINAA KISI COMMENT KE */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@100;200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
 @import "tailwindcss";
 
-/* 2. THEME CONFIGURATION */
+/* Theme Configuration for Industrial Luxury */
 @theme {
-  --font-serif: "Cormorant Garamond", serif;
-  --font-sans: "Inter", sans-serif;
+  --font-industrial: 'Playfair Display', serif;
+  --color-brand-red: #dc2626;
 }
 
-/* 3. GLOBAL STYLES */
-html, body {
-  background-color: #000000;
-  color: white;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  font-family: var(--font-sans);
-}
+/* Global Styles */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  /* 🚫 HIDE SCROLLBAR (Chrome, Safari, Edge and Firefox) */
+  /* Isse wo grey scroller line gayab ho jayegi */
+  html {
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    overflow-x: clip;
+  }
 
-/* Scrollbar styling (Nevo Aesthetic) */
-::-webkit-scrollbar {
-  width: 5px;
-}
-::-webkit-scrollbar-track {
-  background: #000;
-}
-::-webkit-scrollbar-thumb {
-  background: #ffffff;
+  html::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari and Opera */
+  }
+
+  /* Hide the default cursor ONLY when the custom cursor is active */
+  body.no-cursor, body.no-cursor * {
+    cursor: none;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: #000000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-industrial);
+    color: #f0f0f0; 
+    background-color: #0a0a0a; 
+    /* Extra safety to hide scrollbar on body */
+    scrollbar-width: none;
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom selection highlight for a branded feel */
+  ::selection {
+    background-color: var(--color-brand-red);
+    color: #ffffff;
+  }
 }

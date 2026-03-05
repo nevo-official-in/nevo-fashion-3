@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 
-export const About = () => {
+const AboutPage = () => {
   return (
     <div className="min-h-screen bg-black text-white pt-32 px-4 md:px-10 pb-20">
       <Helmet><title>NEVO | THE SYSTEM</title></Helmet>
@@ -112,3 +112,5 @@ export const About = () => {
     </div>
   );
 };
+
+export default AboutPage;

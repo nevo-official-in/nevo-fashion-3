@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-export const Journal = () => {
+const JournalPage = () => {
   const articles = [
     {
       id: 1,
@@ -170,3 +170,5 @@ export const Journal = () => {
     </div>
   );
 };
+
+export default JournalPage;

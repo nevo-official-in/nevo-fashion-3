@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus } from 'lucide-react';
-import { useCartStore } from '../store/cartStore';
+import { useCartStore } from '../store';
 import { toast } from 'sonner';
 
 export const QuickViewModal = ({ product, isOpen, onClose }) => {
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] || null);
   const [quantity, setQuantity] = useState(1);
-  const addToCart = useCartStore((state) => state.addItem);
+  const addToCart = useCartStore((state) => state.addToCart);
   const openCart = useCartStore((state) => state.openCart);
 
   if (!product) return null;

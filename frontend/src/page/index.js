@@ -1,0 +1,16 @@
+export { default as AboutPage } from './About';
+export { default as AccountPage } from './AccountPage';
+export { default as BagPage } from './BagPage';
+export { Checkout } from './Checkout';
+export { default as CollectionPage } from './Collection';
+export { Contact } from './Contact';
+export { default as FeaturedPage } from './FeaturedPage';
+export { default as HomePage } from './HomePage';
+export { default as JournalPage } from './JournalPage';
+export { Logistics } from './Logistics';
+export { OrderConfirmation } from './OrderConfirmation';
+export { default as Orders } from './Orders';
+export { Privacy } from './Privacy';
+export { ProductDetail } from './ProductDetail';
+export { default as SearchPage } from './SearchPage';
+export { Terms } from './Terms';

@@ -2,9 +2,180 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '../store/cartStore';
-import { fetchProduct, getProductSlug } from '../lib/api';
 import { toast } from 'sonner';
 import { Heart, Share2, ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
+
+const DUMMY_ARTIFACTS = [
+  { 
+    id: 'nevo-cyber-tee-001', 
+    name: 'Cybernilism Hoodie', 
+    price: 2499, 
+    originalPrice: 3999,
+    category: 'APPAREL', 
+    images: [
+      'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800',
+      'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800',
+    ], 
+    sizes: ['S','M','L','XL'], 
+    stock: 20,
+    discount: 38
+  },
+  {
+    id: 'nevo-shell-jacket-002',
+    name: 'Tech Shell Jacket',
+    price: 4999,
+    originalPrice: 7999,
+    category: 'OUTERWEAR',
+    images: [
+      'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800',
+      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800',
+    ],
+    sizes: ['M', 'L', 'XL'],
+    stock: 15,
+    discount: 38
+  },
+  {
+    id: 'nevo-cargo-pant-003',
+    name: 'Utility Cargo Pant',
+    price: 3499,
+    originalPrice: 5499,
+    category: 'APPAREL',
+    images: [
+      'https://images.unsplash.com/photo-1624378439575-d8705ad7d960?q=80&w=800',
+      'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?q=80&w=800',
+    ],
+    sizes: ['28', '30', '32', '34'],
+    stock: 25,
+    discount: 36
+  },
+  {
+    id: 'nevo-item-004',
+    name: 'System Cap',
+    price: 1299,
+    originalPrice: 1999,
+    category: 'ACCESSORIES',
+    images: [
+      'https://images.unsplash.com/photo-1588850567047-147953b47759?q=80&w=800',
+      'https://images.unsplash.com/photo-1521369909029-2afed882baee?q=80&w=800',
+    ],
+    sizes: ['FREE'],
+    stock: 50,
+    discount: 35
+  },
+  {
+    id: 'nevo-bomber-005',
+    name: 'Stealth Bomber Jacket',
+    price: 5999,
+    originalPrice: 8999,
+    category: 'OUTERWEAR',
+    images: [
+      'https://images.unsplash.com/photo-1544022613-e87ca75a784a?q=80&w=800',
+      'https://images.unsplash.com/photo-1559582798-678dfc712ccd?q=80&w=800',
+    ],
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    stock: 12,
+    discount: 33
+  },
+  {
+    id: 'nevo-tee-006',
+    name: 'Void Graphic Tee',
+    price: 1799,
+    originalPrice: 2499,
+    category: 'APPAREL',
+    images: [
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800',
+      'https://images.unsplash.com/photo-1503342394128-c104d54dba01?q=80&w=800',
+    ],
+    sizes: ['S', 'M', 'L', 'XL'],
+    stock: 40,
+    discount: 28
+  },
+  {
+    id: 'nevo-jeans-007',
+    name: 'Distressed Denim',
+    price: 3999,
+    originalPrice: 5999,
+    category: 'APPAREL',
+    images: [
+      'https://images.unsplash.com/photo-1542272617-08f08630329e?q=80&w=800',
+      'https://images.unsplash.com/photo-1582552966370-980d13d31f62?q=80&w=800',
+    ],
+    sizes: ['28', '30', '32', '34', '36'],
+    stock: 18,
+    discount: 33
+  },
+  {
+    id: 'nevo-sneakers-008',
+    name: 'Urban Runner Sneakers',
+    price: 6999,
+    originalPrice: 9999,
+    category: 'FOOTWEAR',
+    images: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800',
+      'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=800',
+    ],
+    sizes: ['7', '8', '9', '10', '11'],
+    stock: 22,
+    discount: 30
+  },
+  {
+    id: 'nevo-backpack-009',
+    name: 'Tactical Backpack',
+    price: 4499,
+    originalPrice: 6499,
+    category: 'ACCESSORIES',
+    images: [
+      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=800',
+      'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?q=80&w=800',
+    ],
+    sizes: ['ONE SIZE'],
+    stock: 30,
+    discount: 31
+  },
+  {
+    id: 'nevo-sweater-010',
+    name: 'Oversized Knit Sweater',
+    price: 3799,
+    originalPrice: 5499,
+    category: 'APPAREL',
+    images: [
+      'https://images.unsplash.com/photo-1620799140408-ed5341cd2431?q=80&w=800',
+      'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800',
+    ],
+    sizes: ['S', 'M', 'L', 'XL'],
+    stock: 25,
+    discount: 31
+  },
+  {
+    id: 'nevo-shorts-011',
+    name: 'Tech Cargo Shorts',
+    price: 2299,
+    originalPrice: 3299,
+    category: 'APPAREL',
+    images: [
+      'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=800',
+      'https://images.unsplash.com/photo-1504198458649-3128b932f49e?q=80&w=800',
+    ],
+    sizes: ['S', 'M', 'L', 'XL'],
+    stock: 35,
+    discount: 30
+  },
+  {
+    id: 'nevo-watch-012',
+    name: 'Minimalist Steel Watch',
+    price: 8999,
+    originalPrice: 12999,
+    category: 'ACCESSORIES',
+    images: [
+      'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=800',
+      'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=800',
+    ],
+    sizes: ['ONE SIZE'],
+    stock: 15,
+    discount: 31
+  },
+];
+
 
 export const ProductDetail = () => {
   const { id } = useParams();
@@ -17,22 +188,24 @@ export const ProductDetail = () => {
   const [activeAccordion, setActiveAccordion] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   
-  const addToCart = useCartStore((state) => state.addItem);
+  const addToCart = useCartStore((state) => state.addToCart);
   const openCart = useCartStore((state) => state.openCart);
 
   useEffect(() => {
     const loadProduct = async () => {
       try {
-        console.log('Loading product with ID:', id);
-        const slug = getProductSlug(id);
-        console.log('Product slug:', slug);
-        const data = await fetchProduct(slug);
-        console.log('Product data:', data);
-        setProduct(data);
-        if (data.sizes?.length) setSelectedSize(data.sizes[0]);
+        const selectedProduct = DUMMY_ARTIFACTS.find((p) => p.id === id);
+
+        if (selectedProduct) {
+          setProduct(selectedProduct);
+          if (selectedProduct.sizes?.length) setSelectedSize(selectedProduct.sizes[0]);
+        } else {
+          toast.error('Product not found');
+          navigate('/collection');
+        }
       } catch (err) {
         console.error('Product load failed:', err);
-        toast.error('Product not found');
+        toast.error('Failed to load product');
         navigate('/collection');
       } finally {
         setLoading(false);
@@ -41,6 +214,7 @@ export const ProductDetail = () => {
     loadProduct();
     window.scrollTo(0, 0);
   }, [id, navigate]);
+
 
   const handleAddToCart = () => {
     if (!product) {
@@ -52,10 +226,7 @@ export const ProductDetail = () => {
       return;
     }
     
-    const productSlug = getProductSlug(product.id);
-    console.log('Adding to cart:', { product: product.name, size: selectedSize, quantity, slug: productSlug });
-    
-    addToCart({ ...product, id: productSlug }, selectedSize, quantity);
+    addToCart(product, selectedSize, quantity);
     openCart();
     toast.success(`${product.name} (${selectedSize}) x${quantity} added to bag! 🔥`);
   };
@@ -88,8 +259,6 @@ export const ProductDetail = () => {
       </div>
     );
   }
-
-  console.log('Rendering product:', product.name, 'Images:', product.images);
 
   const accordionItems = [
     {
@@ -129,7 +298,6 @@ export const ProductDetail = () => {
     }
   ];
 
-  // Get first valid image or fallback
   const mainImage = product.images?.[selectedImage]?.trim() || 
                     product.images?.[0]?.trim() || 
                     'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800';
@@ -163,7 +331,6 @@ export const ProductDetail = () => {
               alt={product.name}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               onError={(e) => {
-                console.error('Main image failed:', mainImage);
                 e.target.src = 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800';
               }}
             />

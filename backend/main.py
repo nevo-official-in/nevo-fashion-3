@@ -1,49 +1,55 @@
-from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from motor.motor_asyncio import AsyncIOMotorClient
+from bson import ObjectId
+import os
+from dotenv import load_dotenv
 
-# ============ PRODUCT ============
-class Product(BaseModel):
-    id: str
-    name: str
-    description: str
-    price: float
-    images: List[str]
-    category: str  # Store as UPPERCASE: "APPAREL", "OUTERWEAR"
-    sizes: List[str]  # ["S", "M", "L", "XL"]
-    stock: int = 0  # Available quantity
-    in_stock: bool = True  # Auto-calculated
-    material: Optional[str] = "Premium Quality"
-    limited_edition: bool = False
+load_dotenv()
 
-    # Auto-update in_stock based on stock
-    def __init__(self, **data):
-        super().__init__(**data)
-        self.in_stock = self.stock > 0
+app = FastAPI()
 
-# ============ CART ============
-class CartItem(BaseModel):
-    product_id: str
-    quantity: int = 1
-    size: str  # "M", "L", etc.
+# Setup CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"]  # Allow all methods
+)
 
-# ============ SHIPPING ============
-class ShippingAddress(BaseModel):
-    firstName: str
-    lastName: str
-    address: str
-    city: str
-    state: str
-    zipCode: str
-    country: str
+@app.on_event("startup")
+async def startup_db_client():
+    app.mongodb_client = AsyncIOMotorClient(os.getenv("MONGODB_URL"))
+    app.mongodb = app.mongodb_client.get_default_database()
 
-# ============ ORDER ============
-class OrderCreate(BaseModel):
-    items: List[CartItem]
-    customer_email: EmailStr
-    shipping_address: ShippingAddress
-    origin_url: Optional[str] = "https://nevo.store"
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    app.mongodb_client.close()
 
-class OrderResponse(BaseModel):
-    success: bool
-    message: str
-    order_id: Optional[str] = None
+async def get_all_products():
+    products = []
+    # Use the aggregate method to add a "id" field to each document
+    async for product in app.mongodb.products.aggregate([{"$addFields": {"id": {"$toString": "$_id"}}}]):
+        products.append(product)
+    return products
+
+@app.get("/")
+def root():
+    return {"status": "NEVO API is running 🔥"}
+
+@app.get("/api/health")
+def health():
+    return {"status": "healthy"}
+
+@app.get("/api/products")
+async def list_products():
+    return await get_all_products()
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host=os.getenv("HOST", "0.0.0.0"),
+        port=int(os.getenv("PORT", 8000)),
+        reload=True
+    )
