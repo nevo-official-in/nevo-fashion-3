@@ -44,7 +44,7 @@ export const Header = ({ isMenuOpen, onMenuOpen, onCartOpen }) => {
         {/* Left Nav */}
         <nav className="flex items-center gap-8">
           <Link to="/featured" className="text-[11px] font-mono uppercase tracking-[0.2em] text-white hover:text-red-600 transition-colors">
-            Featured
+            Contact
           </Link>
           <Link to="/collection" className="text-[11px] font-mono uppercase tracking-[0.2em] text-white hover:text-red-600 transition-colors">
             Collections
