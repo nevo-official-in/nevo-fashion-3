@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-const HomePage = () => {
+export const HomePage = () => {
+  const [hoveredProduct, setHoveredProduct] = useState(null);
+
   const products = [
     {
       id: 'nevo-cyber-tee-001',
@@ -11,8 +13,8 @@ const HomePage = () => {
       originalPrice: 3999,
       category: 'APPAREL',
       images: [
-        'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800',
-        'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800',
+        'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800  ',
+        'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800  ',
       ],
       sizes: ['S', 'M', 'L', 'XL'],
       stock: 50,
@@ -25,8 +27,8 @@ const HomePage = () => {
       originalPrice: 7999,
       category: 'OUTERWEAR',
       images: [
-        'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800',
-        'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800',
+        'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800  ',
+        'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800  ',
       ],
       sizes: ['M', 'L', 'XL'],
       stock: 20,
@@ -39,8 +41,8 @@ const HomePage = () => {
       originalPrice: 5499,
       category: 'APPAREL',
       images: [
-        'https://images.unsplash.com/photo-1624378439575-d8705ad7d960?q=80&w=800',
-        'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?q=80&w=800',
+        'https://images.unsplash.com/photo-1624378439575-d8705ad7d960?q=80&w=800  ',
+        'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?q=80&w=800  ',
       ],
       sizes: ['28', '30', '32', '34'],
       stock: 35,
@@ -53,8 +55,8 @@ const HomePage = () => {
       originalPrice: 1999,
       category: 'ACCESSORIES',
       images: [
-        'https://images.unsplash.com/photo-1588850567047-147953b47759?q=80&w=800',
-        'https://images.unsplash.com/photo-1521369909029-2afed882baee?q=80&w=800',
+        'https://images.unsplash.com/photo-1588850567047-147953b47759?q=80&w=800  ',
+        'https://images.unsplash.com/photo-1521369909029-2afed882baee?q=80&w=800  ',
       ],
       sizes: ['FREE'],
       stock: 50,
@@ -67,46 +69,43 @@ const HomePage = () => {
       <Helmet><title>NEVO | Luxury Streetwear</title></Helmet>
 
       {/* ========== HERO SECTION ========== */}
-<section className="relative h-screen flex flex-col items-center justify-end overflow-hidden pb-32">
-<video
-  key="guaranteed-video"
-  autoPlay
-  loop
-  muted
-  playsInline
-  className="absolute inset-0 w-full h-full object-cover opacity-60"
-  style={{ filter: 'contrast(1.2) brightness(0.6) grayscale(1)' }}
->
-  {/* 🔥 Option 1: High-Speed Night Driving (Universal Link) */}
-  <source 
-    src="https://static.videezy.com/system/resources/previews/000/038/544/original/alb_city311_1080p_24fps.mp4" 
-    type="video/mp4" 
-  />
-  {/* Option 2: Backup Stable Link */}
-  <source 
-    src="https://www.w3schools.com/html/mov_bbb.mp4" 
-    type="video/mp4" 
-  />
-</video>
-  
-  {/* Black gradient overlay - Isse text chamkega */}
-  <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
+      <section className="relative h-screen flex flex-col items-center justify-end overflow-hidden pb-32 bg-black">
 
-  <div className="relative z-10 text-center px-4 space-y-10 w-full">
-    <p className="text-[10px] tracking-[0.8em] font-mono uppercase text-white font-bold animate-pulse">
-      THE ART OF PRECISION
-    </p>
-    <Link
-      to="/collection"
-      className="group relative border border-white px-20 py-5 text-[10px] font-bold uppercase overflow-hidden transition-all inline-block bg-transparent text-white hover:bg-white hover:text-black duration-700"
-    >
-      <span className="relative z-10 tracking-[0.4em]">Enter The Void</span>
-    </Link>
-  </div>
-</section>
-      {/* ========== NEW ARRIVALS - CLEAN CARDS ========== */}
-      <section className="py-32 bg-black border-t border-white/5">
-        <div className="w-full">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale"
+        >
+          <source src="https://videos.pexels.com/video-files/3196096/3196096-hd_1920_1080_25fps.mp4  " type="video/mp4" />
+          <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070  " className="w-full h-full object-cover" alt="Hero BG" />
+        </video>
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-4 space-y-8 w-full max-w-2xl mx-auto">
+          <p className="text-[10px] tracking-[0.5em] font-mono uppercase text-white font-bold">
+            ARE YOU READY?
+          </p>
+
+          {/* Button - Black on Hover */}
+          <Link
+            to="/collection"
+            className="group relative border border-white px-20 py-5 text-xs font-bold uppercase overflow-hidden transition-all inline-block bg-transparent text-white hover:bg-white hover:text-black"
+          >
+            <span className="relative z-10">Shop Now</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* ========== NEW ARRIVALS ========== */}
+      <section className="py-32 px-4 md:px-10 bg-black border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+
           <div className="flex justify-between items-end mb-16 border-b border-white/10 pb-6">
             <div>
               <p className="font-mono text-red-600 text-[10px] tracking-widest mb-2">NEW</p>
@@ -119,82 +118,102 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {products.map((product) => (
-              <Link
+              <div
                 key={product.id}
-                to={`/product/${product.id}`}
                 className="group cursor-pointer"
+                onMouseEnter={() => setHoveredProduct(product.id)}
+                onMouseLeave={() => setHoveredProduct(null)}
               >
-                {/* Clean Image Container - No Buttons */}
                 <div className="relative aspect-[3/4] overflow-hidden bg-zinc-900 border border-white/5 mb-4">
+
+                  {/* Image 1 - Default */}
                   <img
                     src={product.images[0]}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className={`w-full h-full object-cover transition-all duration-700 ${hoveredProduct === product.id ? 'opacity-0 scale-110' : 'opacity-100 scale-100'
+                      }`}
                   />
-                  
-                  {/* Discount Badge Only */}
+
+                  {/* Image 2 - Hover (Different Angle) */}
+                  {product.images[1] && (
+                    <img
+                      src={product.images[1]}
+                      alt={`${product.name} - angle 2`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${hoveredProduct === product.id ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                        }`}
+                    />
+                  )}
+
                   {product.discount && (
                     <div className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase">
                       -{product.discount}%
                     </div>
                   )}
-                </div>
 
-                {/* Product Info - Clean */}
-                <h3 className="text-sm font-bold mb-1 group-hover:text-red-600 transition-colors">
-                  {product.name}
-                </h3>
-                <p className="text-[10px] opacity-50 font-mono mb-2">
-                  {product.category}
-                </p>
-                
-                {/* Price */}
-                <div className="flex items-center gap-2">
-                  {product.originalPrice && (
-                    <span className="text-[10px] line-through opacity-40">
-                      ₹{product.originalPrice.toLocaleString()}
-                    </span>
-                  )}
-                  <span className="text-sm font-bold text-red-600">
-                    ₹{product.price.toLocaleString()}
-                  </span>
+                  {/* Quick View - Links to Collection */}
+                  <Link
+                    to="/collection"
+                    className="absolute bottom-0 left-0 right-0 bg-white text-black py-3 text-[10px] font-bold uppercase tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-300 hover:bg-red-600 hover:text-white text-center"
+                  >
+                    Quick View
+                  </Link>
                 </div>
-              </Link>
+                <h3 className="text-sm font-bold mb-1">{product.name}</h3>
+                <div className="flex justify-between items-center gap-4">
+                  <p className="text-[10px] opacity-50 font-mono">{product.category}</p>
+                  <div className="flex items-center gap-2">
+                    {product.originalPrice && (
+                      <span className="text-[10px] line-through opacity-40">₹{product.originalPrice.toLocaleString()}</span>
+                    )}
+                    <span className="text-sm font-bold text-red-600">₹{product.price.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ========== FIND YOUR PERFECT LOOK ========== */}
-      <section className="py-20 bg-zinc-950 border-t border-white/5">
-        <div className="w-full">
+      <section className="py-20 px-4 md:px-10 bg-zinc-950 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-0 border border-white/10">
+
             <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1558171813441-3e1548494339?q=80&w=1200"
+                src="https://images.unsplash.com/photo-1558171813441-3e1548494339?q=80&w=1200  "
                 alt="NEVO Campaign"
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
               />
             </div>
+
             <div className="flex flex-col justify-center p-10 md:p-16 lg:p-20 space-y-8">
+
               <div>
-                <p className="font-mono text-red-600 text-[10px] tracking-widest mb-3">LIMITED OFFER</p>
+                <p className="font-mono text-red-600 text-[10px] tracking-widest mb-3">
+                  LIMITED OFFER
+                </p>
                 <h2 className="text-4xl md:text-6xl font-bold tracking-normal uppercase leading-[0.9] mb-4">
                   Find Your<br />Perfect Look
                 </h2>
                 <div className="h-[2px] w-20 bg-red-600" />
               </div>
+
               <p className="text-sm opacity-60 leading-relaxed max-w-md">
                 Step into the void with our exclusive launch collection.
                 Industrial-grade materials. Uncompromising design.
               </p>
+
               <div className="space-y-2">
-                <p className="text-[10px] font-mono uppercase opacity-40">Launch Discount</p>
+                <p className="text-[10px] font-mono uppercase opacity-40">
+                  Launch Discount
+                </p>
                 <div className="flex items-baseline gap-4">
                   <span className="text-6xl md:text-7xl font-bold text-red-600">50%</span>
                   <span className="text-sm opacity-50 uppercase">Off First Order</span>
                 </div>
               </div>
+
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Link
                   to="/collection"
@@ -209,24 +228,35 @@ const HomePage = () => {
                   Learn More
                 </Link>
               </div>
-              <p className="text-[9px] font-mono opacity-30 pt-4">* Use code: NEVO50 at checkout</p>
+
+              <p className="text-[9px] font-mono opacity-30 pt-4">
+                * Use code: NEVO50 at checkout
+              </p>
+
             </div>
           </div>
         </div>
       </section>
 
       {/* ========== FEATURED COLLECTIONS ========== */}
-      <section className="py-32 bg-black border-t border-white/5">
-        <div className="w-full">
+      <section className="py-32 px-4 md:px-10 bg-black border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+
           <div className="text-center mb-20">
-            <p className="font-mono text-red-600 text-[10px] tracking-widest mb-2">SHOP BY</p>
-            <h2 className="text-5xl md:text-6xl font-bold tracking-normal uppercase">Featured Collections</h2>
+            <p className="font-mono text-red-600 text-[10px] tracking-widest mb-2">
+              SHOP BY
+            </p>
+            <h2 className="text-5xl md:text-6xl font-bold tracking-normal uppercase">
+              Featured Collections
+            </h2>
             <div className="h-[2px] w-24 bg-red-600 mx-auto mt-6" />
           </div>
+
           <div className="grid md:grid-cols-3 gap-6">
+
             <Link to="/collection?category=apparel" className="group relative aspect-[4/5] overflow-hidden border border-white/5">
               <img
-                src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800"
+                src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800  "
                 alt="Apparel"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
               />
@@ -242,9 +272,10 @@ const HomePage = () => {
                 </div>
               </div>
             </Link>
+
             <Link to="/collection?category=outerwear" className="group relative aspect-[4/5] overflow-hidden border border-white/5">
               <img
-                src="https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800"
+                src="https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800  "
                 alt="Outerwear"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
               />
@@ -260,9 +291,10 @@ const HomePage = () => {
                 </div>
               </div>
             </Link>
+
             <Link to="/collection?category=accessories" className="group relative aspect-[4/5] overflow-hidden border border-white/5">
               <img
-                src="https://images.unsplash.com/photo-1588850567047-147953b47759?q=80&w=800"
+                src="https://images.unsplash.com/photo-1588850567047-147953b47759?q=80&w=800  "
                 alt="Accessories"
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
               />
@@ -278,13 +310,14 @@ const HomePage = () => {
                 </div>
               </div>
             </Link>
+
           </div>
         </div>
       </section>
 
       {/* ========== PHILOSOPHY ========== */}
       <section className="py-40 px-6 bg-zinc-950 border-t border-white/5">
-        <div className="w-full text-center space-y-8">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-4xl md:text-6xl font-bold tracking-normal uppercase">The System & The Soul</h2>
           <div className="h-[2px] w-20 bg-red-600 mx-auto" />
           <p className="text-[8px] opacity-30 mt-4">
@@ -301,8 +334,8 @@ const HomePage = () => {
       </section>
 
       {/* ========== TRUST BADGES ========== */}
-      <section className="py-12 bg-zinc-950 border-b border-white/5">
-        <div className="w-full">
+      <section className="py-12 px-4 md:px-10 bg-zinc-950 border-b border-white/5">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="flex items-center gap-4 p-4 border border-white/5 hover:border-red-600/50 transition-colors">
               <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center">
@@ -315,6 +348,7 @@ const HomePage = () => {
                 <p className="text-[10px] opacity-50">On orders over ₹2000</p>
               </div>
             </div>
+
             <div className="flex items-center gap-4 p-4 border border-white/5 hover:border-red-600/50 transition-colors">
               <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -326,6 +360,7 @@ const HomePage = () => {
                 <p className="text-[10px] opacity-50">7-day exchange</p>
               </div>
             </div>
+
             <div className="flex items-center gap-4 p-4 border border-white/5 hover:border-red-600/50 transition-colors">
               <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -337,6 +372,7 @@ const HomePage = () => {
                 <p className="text-[10px] opacity-50">100% protected</p>
               </div>
             </div>
+
             <div className="flex items-center gap-4 p-4 border border-white/5 hover:border-red-600/50 transition-colors">
               <div className="w-12 h-12 bg-red-600/10 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,14 +389,18 @@ const HomePage = () => {
       </section>
 
       {/* ========== FOOTER ========== */}
-      <footer className="py-20 border-t border-white/10 bg-black">
-        <div className="w-full">
+      <footer className="py-20 border-t border-white/10 px-10 bg-black">
+        <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-40 font-mono text-[10px] tracking-widest">
+
+            {/* Copyright - More Visible */}
             <div className="flex flex-col gap-2 text-center md:text-left">
               <span className="text-xs font-bold">© 2026 NEVO. All Rights Reserved.</span>
               <span className="text-[8px] opacity-50">Designed in the Void</span>
               <span className="text-[8px] opacity-30">Protected under international copyright law</span>
             </div>
+
+            {/* Legal & Social Links */}
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="flex gap-6">
                 <Link to="/about" className="hover:text-red-600 transition-colors">About</Link>
@@ -368,17 +408,18 @@ const HomePage = () => {
                 <Link to="/privacy" className="hover:text-red-600 transition-colors">Privacy</Link>
                 <Link to="/terms" className="hover:text-red-600 transition-colors">Terms</Link>
               </div>
+
               <div className="hidden md:block w-[1px] h-4 bg-white/20" />
+
               <div className="flex gap-6">
                 <a href="#" className="hover:text-red-600 transition-colors">Instagram</a>
                 <a href="#" className="hover:text-red-600 transition-colors">Discord</a>
               </div>
             </div>
+
           </div>
         </div>
       </footer>
     </div>
   );
 };
-
-export default HomePage;

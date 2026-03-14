@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCartStore } from '../store/cartStore';
+import { toast } from 'sonner';
+import { QuickViewModal } from '../components/QuickViewModal';
 
 // Safe slug creator
 const createSlug = (id) => {
@@ -178,15 +181,26 @@ const DUMMY_ARTIFACTS = [
   },
 ];
 
-const CollectionPage = () => {
+export const Collection = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [quickViewProduct, setQuickViewProduct] = useState(null);
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
+  
+  const addToCart = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
 
   useEffect(() => {
     setProducts(DUMMY_ARTIFACTS);
     setLoading(false);
   }, []);
+
+  const handleQuickAdd = (product) => {
+    // Open Quick View Modal instead of directly adding
+    setQuickViewProduct(product);
+    setIsQuickViewOpen(true);
+  };
 
   if (loading) {
     return (
@@ -261,10 +275,16 @@ const CollectionPage = () => {
                   {product.stock > 10 ? 'IN STOCK' : `${product.stock} LEFT`}
                 </div>
 
-                {/* Add to Bag Button */}
-                <div className="absolute bottom-0 left-0 right-0 bg-white text-black py-3 text-[10px] font-bold uppercase tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-300 hover:bg-red-600 hover:text-white z-10 text-center">
-                  View Product
-                </div>
+                {/* Quick Add Button */}
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleQuickAdd(product);
+                  }}
+                  className="absolute bottom-0 left-0 right-0 bg-white text-black py-3 text-[10px] font-bold uppercase tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-300 hover:bg-red-600 hover:text-white z-10"
+                >
+                  Quick Add
+                </button>
               </Link>
               
               {/* Product Info */}
@@ -291,8 +311,13 @@ const CollectionPage = () => {
           Load More
         </button>
       </div>
+
+      {/* Quick View Modal */}
+      <QuickViewModal 
+        product={quickViewProduct}
+        isOpen={isQuickViewOpen}
+        onClose={() => setIsQuickViewOpen(false)}
+      />
     </div>
   );
 };
-
-export default CollectionPage;

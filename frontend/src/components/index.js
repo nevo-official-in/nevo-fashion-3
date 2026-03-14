@@ -1,10 +1,10 @@
-export { CartSidebar } from './CartSidebar';
-export { Cursor } from './Cursor';
-export { Footer } from './Footer';
-export { Header } from './Header';
-export { MenuDrawer } from './MenuDrawer';
-export { PageTransition } from './PageTransition';
+export { default as CartSidebar } from './CartSidebar';
+export { default as Cursor } from './Cursor';
+export { default as Footer } from './Footer';
+export { default as Header } from './Header';
+export { default as MenuDrawer } from './MenuDrawer';
+export { default as PageTransition } from './PageTransition';
 export { default as ProductCard } from './ProductCard';
-export { QuickViewModal } from './QuickViewModal';
+export { default as QuickViewModal } from './QuickViewModal';
 export { Skeleton, ProductCardSkeleton } from './Skeleton';
-export { SonnerToaster } from './SonnerToaster';
+export { default as SonnerToaster } from './SonnerToaster';

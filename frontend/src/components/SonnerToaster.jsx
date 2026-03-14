@@ -1,6 +1,6 @@
 import { Toaster } from 'sonner';
 
-export const SonnerToaster = () => (
+const SonnerToaster = () => (
   <Toaster 
     position="top-right" 
     richColors 
@@ -42,3 +42,5 @@ export const SonnerToaster = () => (
     }}
   />
 );
+
+export default SonnerToaster;

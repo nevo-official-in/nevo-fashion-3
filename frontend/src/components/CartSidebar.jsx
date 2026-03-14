@@ -1,22 +1,15 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { useCartStore } from '../store';
+import { useCartStore } from '../store/cartStore';
 import { Link } from 'react-router-dom';
 
-export const CartSidebar = () => {
-  const { 
-    items, 
-    getTotalPrice, 
-    removeFromCart, 
-    updateQuantity,
-    isCartOpen,
-    closeCart
-  } = useCartStore();
+export const CartSidebar = ({ isOpen, onClose }) => {
+  const { items, getTotal, removeItem, updateQuantity } = useCartStore();
 
   return (
     <AnimatePresence>
-      {isCartOpen && (
+      {isOpen && (
         <>
           {/* Backdrop */}
           <motion.div
@@ -24,11 +17,11 @@ export const CartSidebar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={closeCart}
+            onClick={onClose}
             className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[55]"
           />
 
-          {/* Cart Panel */}
+          {/* Cart Panel - Compact Mobile, Premium Desktop */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -45,7 +38,7 @@ export const CartSidebar = () => {
                   <h2 className="text-xl md:text-2xl font-bold uppercase tracking-[0.2em] mt-1">System Cart</h2>
                 </div>
                 <button 
-                  onClick={closeCart}
+                  onClick={onClose}
                   className="w-10 h-10 flex items-center justify-center hover:bg-white/5 transition-colors rounded-sm"
                 >
                   <X className="w-5 h-5" />
@@ -73,24 +66,24 @@ export const CartSidebar = () => {
                     {items.map((item, idx) => (
                       <div key={idx} className="flex gap-4 md:gap-6 pb-6 md:pb-8 border-b border-white/5">
                         <img 
-                          src={item.images?.[0] || 'https://via.placeholder.com/100'} 
-                          alt={item.name}
+                          src={item.product.images?.[0] || 'https://via.placeholder.com/100'} 
+                          alt={item.product.name}
                           className="w-20 h-24 md:w-28 md:h-36 object-cover grayscale border border-white/5"
                         />
                         <div className="flex-1">
-                          <h3 className="text-sm md:text-base font-bold mb-2">{item.name}</h3>
+                          <h3 className="text-sm md:text-base font-bold mb-2">{item.product.name}</h3>
                           <p className="text-[10px] opacity-50 mb-3">Size: {item.size}</p>
-                          <p className="text-sm md:text-base font-bold mb-4">₹{item.price.toLocaleString()}</p>
+                          <p className="text-sm md:text-base font-bold mb-4">₹{item.product.price.toLocaleString()}</p>
                           <div className="flex items-center gap-3">
                             <button 
-                              onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
+                              onClick={() => updateQuantity(item.product.id, item.size, item.quantity - 1)}
                               className="w-8 h-8 border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-colors text-xs"
                             >
                               -
                             </button>
                             <span className="text-sm min-w-[30px] text-center">{item.quantity}</span>
                             <button 
-                              onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
+                              onClick={() => updateQuantity(item.product.id, item.size, item.quantity + 1)}
                               className="w-8 h-8 border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-colors text-xs"
                             >
                               +
@@ -98,7 +91,7 @@ export const CartSidebar = () => {
                           </div>
                         </div>
                         <button 
-                          onClick={() => removeFromCart(item.id, item.size)}
+                          onClick={() => removeItem(item.product.id, item.size)}
                           className="text-[10px] opacity-40 hover:text-red-600 transition-colors uppercase tracking-wider"
                         >
                           Remove
@@ -109,13 +102,13 @@ export const CartSidebar = () => {
                 )}
               </div>
 
-              {/* Footer */}
+              {/* Footer - Desktop Enhanced */}
               {items.length > 0 && (
                 <div className="p-6 md:p-8 border-t border-white/5 space-y-4 md:space-y-6">
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-[10px] font-mono uppercase tracking-widest opacity-50">Subtotal</span>
-                      <span className="text-base md:text-lg font-bold">₹{getTotalPrice().toLocaleString()}</span>
+                      <span className="text-base md:text-lg font-bold">₹{getTotal().toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-[10px] font-mono uppercase tracking-widest opacity-50">Shipping</span>
@@ -123,7 +116,7 @@ export const CartSidebar = () => {
                     </div>
                     <div className="flex justify-between items-center pt-3 border-t border-white/5">
                       <span className="text-[10px] font-mono uppercase tracking-widest opacity-50">Total Value</span>
-                      <span className="text-lg md:text-xl font-bold text-red-600">₹{getTotalPrice().toLocaleString()}</span>
+                      <span className="text-lg md:text-xl font-bold text-red-600">₹{getTotal().toLocaleString()}</span>
                     </div>
                   </div>
                   
@@ -131,7 +124,7 @@ export const CartSidebar = () => {
                   
                   <Link 
                     to="/checkout"
-                    onClick={closeCart}
+                    onClick={onClose}
                     className="block w-full bg-white text-black text-center py-4 md:py-5 text-xs md:text-sm font-bold uppercase tracking-[0.2em] hover:bg-red-600 hover:text-white transition-all"
                   >
                     Initialize Checkout

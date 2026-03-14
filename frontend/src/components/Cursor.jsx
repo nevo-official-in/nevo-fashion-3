@@ -1,68 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+
+import React, { useEffect, useState } from 'react';
+import { motion, useSpring } from 'framer-motion';
 
 export const Cursor = () => {
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-
-  const springConfig = { damping: 25, stiffness: 300 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
+  
+  // Smooth movement ke liye spring physics
+  const mouseX = useSpring(0, { stiffness: 500, damping: 28, mass: 0.5 });
+  const mouseY = useSpring(0, { stiffness: 500, damping: 28, mass: 0.5 });
 
   useEffect(() => {
-    // Check for touch device once on mount
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouchDevice(hasTouch);
+    const moveMouse = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
 
-    if (!hasTouch) {
-      // Add class to hide default cursor only on non-touch devices
-      document.body.classList.add('no-cursor');
+    const handleHoverStart = (e) => {
+      // Check karo agar element ya uska koi parent hoverable hai
+      if (e.target.closest('a, button, .group, .cursor-pointer')) {
+        setIsHovered(true);
+      }
+    };
 
-      const moveMouse = (e) => {
-        mouseX.set(e.clientX);
-        mouseY.set(e.clientY);
-      };
+    const handleHoverEnd = () => {
+      setIsHovered(false);
+    };
 
-      const handleHoverStart = (e) => {
-        if (e.target.matches('a, button, [data-hover]')) {
-          setIsHovered(true);
-        }
-      };
+    window.addEventListener("mousemove", moveMouse);
+    // Mouseover use kar rahe hain taaki naye elements bhi detect hon
+    window.addEventListener("mouseover", handleHoverStart);
+    window.addEventListener("mouseout", handleHoverEnd);
 
-      const handleHoverEnd = (e) => {
-        if (e.target.matches('a, button, [data-hover]')) {
-          setIsHovered(false);
-        }
-      };
-
-      window.addEventListener("mousemove", moveMouse);
-      window.addEventListener("mouseover", handleHoverStart);
-      window.addEventListener("mouseout", handleHoverEnd);
-
-      return () => {
-        // Clean up listeners and class
-        window.removeEventListener("mousemove", moveMouse);
-        window.removeEventListener("mouseover", handleHoverStart);
-        window.removeEventListener("mouseout", handleHoverEnd);
-        document.body.classList.remove('no-cursor');
-      };
-    }
+    return () => {
+      window.removeEventListener("mousemove", moveMouse);
+      window.removeEventListener("mouseover", handleHoverStart);
+      window.removeEventListener("mouseout", handleHoverEnd);
+    };
   }, [mouseX, mouseY]);
-
-  // Don't render the custom cursor on touch devices
-  if (isTouchDevice) {
-    return null;
-  }
 
   return (
     <motion.div
       className="fixed top-0 left-0 w-4 h-4 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block"
       style={{
-        x: springX,
-        y: springY,
+        x: mouseX,
+        y: mouseY,
+        translateX: "-50%",
+        translateY: "-50%",
       }}
       animate={{
         scale: isHovered ? 4 : 1, // Hover par 4 guna bada

@@ -1,89 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Search, ShoppingBag, User } from 'lucide-react';
-import { useCartStore } from '../store';
+import { useCartStore } from '../store/cartStore';
+import { ShoppingBag, User, Search, Menu } from 'lucide-react';
 
-export const Header = ({ onMenuOpen }) => {
+export const Header = ({ isMenuOpen, onMenuOpen, onCartOpen }) => {
+  const itemCount = useCartStore((state) => state.getTotalItems());
   const [scrolled, setScrolled] = useState(false);
-  const openCart = useCartStore((state) => state.openCart);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      // 100px scroll hone ke baad blur activate
+      setScrolled(window.scrollY > 100);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const leftLinks = [
-    { path: '/featured', label: 'Featured' },
-    { path: '/collections', label: 'Collections' },
-    { path: '/journal', label: 'Journal' },
-    { path: '/about', label: 'About' },
-  ];
-
-  const linkStyle = "font-sans text-[10px] uppercase tracking-[0.3em] text-white hover:opacity-50 transition-all duration-500";
-
   return (
     <header 
-      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-700 ease-in-out ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
         scrolled 
-          ? 'h-14 bg-black/40 backdrop-blur-md border-b border-white/5' 
-          : 'h-20 bg-transparent'
+          ? 'bg-black/50 backdrop-blur-md border-b border-white/10' 
+          : 'bg-transparent backdrop-blur-0'
       }`}
     >
-      <div className="w-full h-full px-6 md:px-12 flex items-center justify-between">
+      <div className="flex items-center justify-between px-6 md:px-12 py-6">
         
-        {/* Mobile Menu Icon */}
-        <div className="md:hidden flex-1 flex items-center justify-start">
-          <button onClick={onMenuOpen} className="text-white p-2">
-            <Menu size={20} />
+        {/* Left - Menu + Search */}
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={onMenuOpen}
+            className={`transition-colors hover:text-red-600 ${
+              scrolled ? 'text-white' : 'text-white'
+            }`}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          
+          <button 
+            className={`hidden md:block transition-colors hover:text-red-600 ${
+              scrolled ? 'text-white' : 'text-white'
+            }`}
+          >
+            <Search className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Desktop Links (Left) */}
-        <div className="hidden md:flex flex-1 items-center">
-          <nav className="flex items-center gap-8 lg:gap-12">
-            {leftLinks.map(link => (
-              <Link key={link.label} to={link.path} className={linkStyle}>
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Logo */}
-        <div className="flex-shrink-0">
-          <Link to="/" className="font-serif text-lg md:text-xl font-bold tracking-[0.6em] text-white uppercase">
+        {/* Center - Logo */}
+        <Link to="/" className="flex-1 flex justify-center">
+          <h1 
+            className={`text-2xl md:text-3xl font-serif font-bold tracking-[0.2em] uppercase transition-colors hover:text-red-600 ${
+              scrolled ? 'text-white' : 'text-white'
+            }`}
+          >
             NEVO
-          </Link>
-        </div>
+          </h1>
+        </Link>
 
-        {/* Right-side Icons */}
-        <div className="flex-1 flex items-center justify-end gap-4 md:gap-8 lg:gap-12">
-          {/* Desktop Links */}
-          <Link to="/search" className="text-white hidden md:block">
-             <span className={linkStyle}>Search</span>
-          </Link>
-          <Link to="/account" className="text-white hidden md:block">
-            <span className={linkStyle}>Account</span>
-          </Link>
-          <button onClick={openCart} className="text-white hidden md:block">
-             <span className={linkStyle}>Bag</span>
+        {/* Right - Icons */}
+        <div className="flex items-center gap-4 md:gap-6">
+          <button 
+            className={`hidden md:block transition-colors hover:text-red-600 ${
+              scrolled ? 'text-white' : 'text-white'
+            }`}
+          >
+            <User className="w-5 h-5" />
           </button>
 
-          {/* Mobile Icons */}
-          <Link to="/search" className="text-white md:hidden p-2">
-            <Search size={18} />
-          </Link>
-          <Link to="/account" className="text-white md:hidden p-2">
-            <User size={18} />
-          </Link>
-          <button onClick={openCart} className="text-white md:hidden p-2">
-            <ShoppingBag size={18} />
+          <button 
+            onClick={onCartOpen}
+            className={`relative transition-colors hover:text-red-600 ${
+              scrolled ? 'text-white' : 'text-white'
+            }`}
+          >
+            <ShoppingBag className="w-5 h-5" />
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
           </button>
         </div>
-
       </div>
     </header>
   );
