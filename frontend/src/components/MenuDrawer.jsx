@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -12,79 +12,95 @@ export const MenuDrawer = ({ isOpen, onClose }) => {
     { path: '/contact', label: 'Contact', number: '05' },
   ];
 
+  // Body scroll lock
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          className="fixed inset-0 z-[100] bg-black flex flex-col"
+        >
+          {/* Top Bar */}
+          <div className="flex items-center justify-between px-6 md:px-12 py-6">
+            <span className="text-[9px] font-mono uppercase tracking-[0.5em] text-white/30">
+              Navigation
+            </span>
+            <Link to="/" onClick={onClose}>
+              <h1 style={{fontFamily: "'Cormorant Garamond', serif"}}
+                className="text-2xl font-light tracking-[0.3em] uppercase text-white">
+                NEVO
+              </h1>
+            </Link>
+            <button
+              onClick={onClose}
+              className="text-white hover:text-red-600 transition-colors"
+            >
+              <X className="w-5 h-5" strokeWidth={1} />
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="h-[1px] bg-white/5 mx-6 md:mx-12" />
+
+          {/* Menu Links */}
+          <nav className="flex-1 flex flex-col justify-center px-6 md:px-12 space-y-0">
+            {menuItems.map((item, idx) => (
+              <motion.div
+                key={item.path}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: idx * 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Link
+                  to={item.path}
+                  onClick={onClose}
+                  className="group flex items-center gap-6 py-5 md:py-6 border-b border-white/5 hover:border-white/20 transition-all duration-300"
+                >
+                  <span className="text-[9px] font-mono text-white/20 group-hover:text-red-600 transition-colors w-6">
+                    {item.number}
+                  </span>
+                  <span
+                    style={{fontFamily: "'Cormorant Garamond', serif"}}
+                    className="text-4xl md:text-6xl font-light uppercase tracking-wide text-white group-hover:text-red-600 group-hover:tracking-[0.08em] transition-all duration-400"
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </nav>
+
+          {/* Footer */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[55]"
-          />
-
-          {/* Menu Panel */}
-          <motion.div
-            initial={{ x: '-100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 left-0 h-full w-[75%] md:w-[400px] bg-zinc-950 z-[60] border-r border-white/10"
+            transition={{ delay: 0.5 }}
+            className="px-6 md:px-12 py-8 border-t border-white/5"
           >
-            <div className="flex flex-col h-full p-6 md:p-8">
-              
-              {/* Header */}
-              <div className="flex items-center justify-between mb-12">
-                <span className="text-[10px] font-mono uppercase tracking-[0.3em] opacity-50">Navigation</span>
-                <button 
-                  onClick={onClose}
-                  className="hover:text-red-600 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+              <div className="flex gap-6 text-[9px] font-mono uppercase tracking-widest text-white/30">
+                <a href="#" className="hover:text-red-600 transition-colors">Instagram</a>
+                <span className="opacity-20">/</span>
+                <a href="#" className="hover:text-red-600 transition-colors">Discord</a>
+                <span className="opacity-20">/</span>
+                <a href="#" className="hover:text-red-600 transition-colors">Twitter</a>
               </div>
-
-              {/* Menu Links */}
-              <nav className="flex-1 space-y-2">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={onClose}
-                    className="group flex items-center gap-4 py-6 px-4 -mx-4 hover:bg-white/5 transition-all duration-300 rounded-sm"
-                  >
-                    <span className="text-[10px] font-mono opacity-30 group-hover:opacity-100 group-hover:text-red-600 transition-all">
-                      {item.number}
-                    </span>
-                    <span className="text-2xl md:text-3xl font-bold uppercase tracking-tight group-hover:text-red-600 group-hover:tracking-[0.1em] transition-all duration-300">
-                      {item.label}
-                    </span>
-                  </Link>
-                ))}
-              </nav>
-
-              {/* Footer */}
-              <div className="pt-8 border-t border-white/5 space-y-4">
-                <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest opacity-40">
-                  <span>© 2026 NEVO</span>
-                  <span>SYSTEM_ONLINE</span>
-                </div>
-                
-                <div className="flex gap-4 text-[10px] uppercase tracking-widest opacity-50">
-                  <a href="#" className="hover:text-red-600 transition-colors">Instagram</a>
-                  <span className="opacity-30">/</span>
-                  <a href="#" className="hover:text-red-600 transition-colors">Discord</a>
-                  <span className="opacity-30">/</span>
-                  <a href="#" className="hover:text-red-600 transition-colors">Twitter</a>
-                </div>
-              </div>
-
+              <span className="text-[9px] font-mono uppercase tracking-widest text-white/20">
+                © 2026 NEVO Studio
+              </span>
             </div>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   );
