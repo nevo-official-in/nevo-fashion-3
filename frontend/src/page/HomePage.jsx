@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
+const SERIF = { fontFamily: "'Cormorant Garamond', serif" };
+
 const useInView = (threshold = 0.1) => {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
@@ -93,39 +95,31 @@ export const HomePage = () => {
     <div className="bg-black text-white selection:bg-red-600 selection:text-white overflow-x-hidden">
       <Helmet><title>NEVO | Luxury Streetwear</title></Helmet>
 
-      {/* ========== HERO SECTION ========== */}
+      {/* ── HERO ── */}
       <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-black">
         <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-50 grayscale"
-          style={{ objectPosition: 'center 30%' }}
+          autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale"
+          style={{ objectPosition: 'center 70%' }}
         >
           <source src="https://videos.pexels.com/video-files/6873503/6873503-hd_1080_1920_25fps.mp4" type="video/mp4" />
           <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2070" className="w-full h-full object-cover" alt="Hero BG" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/40" />
 
         <div
           className={`relative z-10 text-center px-4 w-full max-w-3xl mx-auto transition-all duration-1000 ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-          style={{ marginTop: '16vh' }}
+          style={{ marginTop: '18vh' }}
         >
           <p className="text-[9px] tracking-[0.6em] font-mono uppercase text-white/60 mb-10">
             New Collection — 2026
           </p>
           <div className="space-y-4 mb-12">
-            <h1
-              style={{ fontFamily: "''Cormorant Garamond'', serif" }}
-              className="text-6xl md:text-8xl lg:text-9xl font-light tracking-[0.05em] uppercase text-white leading-none"
-            >
+            <h1 style={SERIF} className="text-6xl md:text-8xl lg:text-9xl font-light tracking-[0.05em] uppercase text-white leading-none">
               NEVO
             </h1>
-            <p
-              style={{ fontFamily: "''Cormorant Garamond'', serif" }}
-              className="text-lg md:text-xl text-white/50 tracking-[0.3em] italic font-light"
-            >
+            <p style={SERIF} className="text-lg md:text-xl text-white/50 tracking-[0.3em] italic font-light">
               Luxury for Everyone
             </p>
           </div>
@@ -150,29 +144,24 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* ========== MARQUEE TICKER ========== */}
+      {/* ── MARQUEE ── */}
       <div className="bg-red-600 py-3 overflow-hidden border-y border-red-500">
-        <div className="flex whitespace-nowrap"
-          style={{ animation: 'marquee 20s linear infinite' }}
-        >
+        <div className="flex whitespace-nowrap" style={{ animation: 'marquee 20s linear infinite' }}>
           {[...Array(3)].map((_, i) => (
-            <span key={i} className="text-[10px] font-mono uppercase tracking-[0.3em] text-white mx-0">
+            <span key={i} className="text-[10px] font-mono uppercase tracking-[0.3em] text-white">
               {marqueeText}
             </span>
           ))}
         </div>
       </div>
 
-      {/* ========== NEW ARRIVALS ========== */}
+      {/* ── NEW ARRIVALS ── */}
       <section ref={arrivalsRef} className="py-32 px-4 md:px-10 bg-black border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className={`flex justify-between items-end mb-16 border-b border-white/10 pb-6 transition-all duration-700 ${arrivalsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
             <div>
               <p className="font-mono text-red-600 text-[9px] tracking-[0.4em] mb-3">NEW</p>
-              <h2
-                style={{ fontFamily: "''Cormorant Garamond'', serif" }}
-                className="text-5xl md:text-7xl font-light tracking-wide uppercase"
-              >
+              <h2 style={SERIF} className="text-5xl md:text-7xl font-light tracking-wide uppercase">
                 New Arrivals
               </h2>
             </div>
@@ -193,33 +182,26 @@ export const HomePage = () => {
                 <div className="relative aspect-[3/4] overflow-hidden bg-zinc-900 mb-4">
                   <Link to={`/product/${product.id}`}>
                     <img
-                      src={product.images[0]}
-                      alt={product.name}
+                      src={product.images[0]} alt={product.name}
                       className={`w-full h-full object-cover transition-all duration-700 ${hoveredProduct === product.id ? 'opacity-0 scale-110' : 'opacity-100 scale-100'}`}
                     />
                     {product.images[1] && (
                       <img
-                        src={product.images[1]}
-                        alt={product.name}
+                        src={product.images[1]} alt={product.name}
                         className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${hoveredProduct === product.id ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                       />
                     )}
                   </Link>
-
                   {product.discount && (
                     <div className="absolute top-3 left-3 bg-red-600 text-white text-[9px] font-mono px-2 py-1 z-10">
                       -{product.discount}%
                     </div>
                   )}
-
-                  {/* Stock badge */}
                   {product.stock <= 10 && (
                     <div className="absolute top-3 right-3 bg-black/80 text-red-500 text-[8px] font-mono px-2 py-1 z-10">
                       {product.stock} LEFT
                     </div>
                   )}
-
-                  {/* Add to Bag hover */}
                   <Link
                     to={`/product/${product.id}`}
                     className="absolute bottom-0 left-0 right-0 bg-white text-black py-3 text-[9px] font-mono uppercase tracking-widest translate-y-full group-hover:translate-y-0 transition-transform duration-300 hover:bg-red-600 hover:text-white text-center z-10"
@@ -227,10 +209,7 @@ export const HomePage = () => {
                     Add to Bag
                   </Link>
                 </div>
-                <h3
-                  style={{ fontFamily: "''Cormorant Garamond'', serif" }}
-                  className="text-base md:text-lg font-light mb-1 tracking-wide"
-                >
+                <h3 style={SERIF} className="text-base md:text-lg font-light mb-1 tracking-wide">
                   {product.name}
                 </h3>
                 <div className="flex justify-between items-center">
@@ -248,7 +227,7 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* ========== FIND YOUR PERFECT LOOK ========== */}
+      {/* ── FIND YOUR PERFECT LOOK ── */}
       <section ref={offerRef} className="py-20 px-4 md:px-10 bg-zinc-950 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className={`grid lg:grid-cols-2 gap-0 border border-white/10 transition-all duration-1000 ${offerInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -262,10 +241,7 @@ export const HomePage = () => {
             <div className="flex flex-col justify-center p-10 md:p-16 lg:p-20 space-y-8">
               <div>
                 <p className="font-mono text-red-600 text-[9px] tracking-[0.4em] mb-3">LIMITED OFFER</p>
-                <h2
-                  style={{ fontFamily: "''Cormorant Garamond'', serif" }}
-                  className="text-5xl md:text-7xl font-light tracking-wide uppercase leading-tight mb-4"
-                >
+                <h2 style={SERIF} className="text-5xl md:text-7xl font-light tracking-wide uppercase leading-tight mb-4">
                   Find Your<br />Perfect Look
                 </h2>
                 <div className="h-[1px] w-16 bg-red-600" />
@@ -277,7 +253,7 @@ export const HomePage = () => {
               <div className="space-y-2">
                 <p className="text-[9px] font-mono uppercase opacity-30 tracking-widest">Launch Discount</p>
                 <div className="flex items-baseline gap-4">
-                  <span style={{ fontFamily: "''Cormorant Garamond'', serif" }} className="text-7xl md:text-8xl font-light text-red-600">50%</span>
+                  <span style={SERIF} className="text-7xl md:text-8xl font-light text-red-600">50%</span>
                   <span className="text-xs opacity-40 uppercase tracking-widest">Off First Order</span>
                 </div>
               </div>
@@ -295,15 +271,12 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* ========== FEATURED COLLECTIONS ========== */}
+      {/* ── FEATURED COLLECTIONS ── */}
       <section ref={collectionsRef} className="py-32 px-4 md:px-10 bg-black border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className={`text-center mb-20 transition-all duration-700 ${collectionsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
             <p className="font-mono text-red-600 text-[9px] tracking-[0.4em] mb-3">SHOP BY</p>
-            <h2
-              style={{ fontFamily: "''Cormorant Garamond'', serif" }}
-              className="text-5xl md:text-7xl font-light tracking-wide uppercase"
-            >
+            <h2 style={SERIF} className="text-5xl md:text-7xl font-light tracking-wide uppercase">
               Featured Collections
             </h2>
             <div className="h-[1px] w-20 bg-red-600 mx-auto mt-6" />
@@ -311,20 +284,19 @@ export const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { to: '/collection?category=apparel', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800', label: 'Apparel', sub: 'Hoodies · Tees · Pants', count: '24' },
-              { to: '/collection?category=outerwear', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800', label: 'Outerwear', sub: 'Jackets · Coats · Shells', count: '12' },
-              { to: '/collection?category=accessories', img: 'https://images.unsplash.com/photo-1534215754734-18e55d13e346?q=80&w=800', label: 'Accessories', sub: 'Caps · Bags · Belts', count: '18' },
+              { to: '/collection?category=apparel',     img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800', label: 'Apparel',     sub: 'Hoodies · Tees · Pants',  count: '24' },
+              { to: '/collection?category=outerwear',   img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800', label: 'Outerwear',   sub: 'Jackets · Coats · Shells', count: '12' },
+              { to: '/collection?category=accessories', img: 'https://images.unsplash.com/photo-1534215754734-18e55d13e346?q=80&w=800', label: 'Accessories', sub: 'Caps · Bags · Belts',    count: '18' },
             ].map((col, idx) => (
               <Link
-                key={col.label}
-                to={col.to}
+                key={col.label} to={col.to}
                 className={`group relative aspect-[4/5] overflow-hidden transition-all duration-700 ${collectionsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                 style={{ transitionDelay: `${idx * 150}ms` }}
               >
                 <img src={col.img} alt={col.label} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8 space-y-3">
-                  <h3 style={{ fontFamily: "''Cormorant Garamond'', serif" }} className="text-4xl font-light tracking-wide uppercase">{col.label}</h3>
+                  <h3 style={SERIF} className="text-4xl font-light tracking-wide uppercase">{col.label}</h3>
                   <p className="text-[9px] font-mono uppercase opacity-0 group-hover:opacity-60 transition-all duration-500 translate-y-2 group-hover:translate-y-0 tracking-widest">
                     {col.sub} →
                   </p>
@@ -339,11 +311,11 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* ========== PHILOSOPHY ========== */}
+      {/* ── PHILOSOPHY ── */}
       <section ref={philosophyRef} className="py-40 px-6 bg-zinc-950 border-t border-white/5">
         <div className={`max-w-4xl mx-auto text-center space-y-8 transition-all duration-1000 ${philosophyInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <p className="font-mono text-red-600 text-[9px] tracking-[0.5em]">OUR PHILOSOPHY</p>
-          <h2 style={{ fontFamily: "''Cormorant Garamond'', serif" }} className="text-5xl md:text-7xl font-light tracking-wide uppercase">
+          <h2 style={SERIF} className="text-5xl md:text-7xl font-light tracking-wide uppercase">
             The System & The Soul
           </h2>
           <div className="h-[1px] w-16 bg-red-600 mx-auto" />
@@ -358,7 +330,7 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* ========== TRUST BADGES ========== */}
+      {/* ── TRUST BADGES ── */}
       <section className="py-12 px-4 md:px-10 bg-black border-b border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -368,7 +340,7 @@ export const HomePage = () => {
               { icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', label: 'Secure Payment', sub: '100% protected' },
               { icon: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z', label: '24/7 Support', sub: 'Always here' },
             ].map((badge) => (
-              <div key={badge.label} className="flex items-center gap-3 p-4 border border-white/5 hover:border-red-600/30 transition-all duration-300 group">
+              <div key={badge.label} className="flex items-center gap-3 p-4 border border-white/5 hover:border-red-600/30 transition-colors duration-300 group">
                 <div className="w-8 h-8 flex items-center justify-center opacity-40 group-hover:opacity-100 transition-opacity shrink-0">
                   <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={badge.icon} />
@@ -384,24 +356,24 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* ========== FOOTER ========== */}
+      {/* ── FOOTER ── */}
       <footer className="py-20 border-t border-white/5 px-10 bg-black">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-10 font-mono text-[9px] tracking-widest opacity-30">
             <div className="flex flex-col gap-2 text-center md:text-left">
-              <span className="text-xs font-light" style={{ fontFamily: "''Cormorant Garamond'', serif" }}>© 2026 NEVO Studio</span>
+              <span style={SERIF} className="text-xs font-light">© 2026 NEVO Studio</span>
               <span className="text-[8px]">Designed in the Void</span>
             </div>
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="flex gap-6">
                 {['About', 'Contact', 'Privacy', 'Terms'].map(link => (
-                  <Link key={link} to={`/${link.toLowerCase()}`} className="hover:text-red-600 hover:opacity-100 transition-all">{link}</Link>
+                  <Link key={link} to={`/${link.toLowerCase()}`} className="hover:text-red-600 hover:opacity-100 transition-colors">{link}</Link>
                 ))}
               </div>
               <div className="hidden md:block w-[1px] h-4 bg-white/20" />
               <div className="flex gap-6">
-                <a href="#" className="hover:text-red-600 hover:opacity-100 transition-all">Instagram</a>
-                <a href="#" className="hover:text-red-600 hover:opacity-100 transition-all">Discord</a>
+                <a href="#" className="hover:text-red-600 hover:opacity-100 transition-colors">Instagram</a>
+                <a href="#" className="hover:text-red-600 hover:opacity-100 transition-colors">Discord</a>
               </div>
             </div>
           </div>

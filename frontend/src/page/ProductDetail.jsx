@@ -5,6 +5,7 @@ import { useCartStore } from '../store/cartStore';
 import { toast } from 'sonner';
 import { Heart, Share2, ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react';
 
+// Dummy data - in a real app, this would come from an API
 const ALL_PRODUCTS = [
   { id: 'nevo-cyber-tee-001', name: 'Cybernilism Hoodie', price: 2499, originalPrice: 3999, category: 'APPAREL', images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800', 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=800'], sizes: ['S','M','L','XL'], stock: 20, discount: 38, description: 'Premium quality hoodie with cybernilism aesthetic. Built for the streets, designed for the void.' },
   { id: 'nevo-shell-jacket-002', name: 'Tech Shell Jacket', price: 4999, originalPrice: 7999, category: 'OUTERWEAR', images: ['https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=800', 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800'], sizes: ['M','L','XL'], stock: 15, discount: 38, description: 'Technical shell jacket with water-resistant finish. Urban armor for modern warriors.' },
@@ -20,6 +21,8 @@ const ALL_PRODUCTS = [
   { id: 'nevo-watch-012', name: 'Minimalist Steel Watch', price: 8999, originalPrice: 12999, category: 'ACCESSORIES', images: ['https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=800', 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=800'], sizes: ['ONE SIZE'], stock: 15, discount: 31, description: 'Minimalist steel watch with sapphire crystal. Time is a luxury.' },
 ];
 
+const MotionLink = motion(Link);
+
 export const ProductDetail = () => {
   const { id } = useParams();
   const [selectedSize, setSelectedSize] = useState(null);
@@ -31,244 +34,184 @@ export const ProductDetail = () => {
   const addToCart = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
 
-  // Find product from dummy data
   const product = ALL_PRODUCTS.find(p =>
-    p.id === id ||
-    p.id.toLowerCase().replace(/[^a-z0-9]+/g, '-') === id
+    p.id === id || p.id.toLowerCase().replace(/[^a-z0-9]+/g, '-') === id
   );
 
   if (!product) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-center px-4">
-        <div className="space-y-6">
-          <p className="text-[9px] font-mono text-red-600 tracking-widest">404</p>
-          <h2 style={{fontFamily: "'Cormorant Garamond', serif"}}
-            className="text-4xl font-light uppercase">
-            Product Not Found
-          </h2>
-          <Link to="/collection"
-            className="inline-block border border-white/20 px-8 py-3 text-[10px] font-mono uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <p className="text-sm font-mono text-red-500 tracking-widest">404</p>
+          <h1 className="text-4xl md:text-5xl font-extralight uppercase tracking-wider mt-4">Product Not Found</h1>
+          <MotionLink to="/collection"
+            className="inline-block border border-white/30 px-10 py-4 text-xs font-mono uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 mt-8"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.5 }}>
             Back to Collection
-          </Link>
-        </div>
+          </MotionLink>
+        </motion.div>
       </div>
     );
   }
 
-  const handleAddToCart = () => {
+  const handleBuyNow = () => {
     if (!selectedSize) {
       toast.error('Please select a size');
       return;
     }
     addToCart({ ...product }, selectedSize, quantity);
-    openCart();
-    toast.success(`${product.name} added to bag!`);
-  };
+    openCart(); // In a real app, this would redirect to checkout
+    toast.info('Proceeding to checkout...');
+  }
 
   const accordionItems = [
     { title: 'Product Details', content: product.description },
     { title: 'Material & Care', content: '100% Premium Cotton. Machine wash cold, hang dry. Do not bleach.' },
     { title: 'Shipping & Returns', content: 'Free shipping on orders over ₹2000. Easy 7-day returns.' },
-    {
-      title: 'Size Guide',
-      content: (
-        <table className="w-full text-xs">
-          <thead>
-            <tr className="border-b border-white/10">
-              <th className="text-left py-2 font-mono">Size</th>
-              <th className="text-left py-2 font-mono">Chest</th>
-              <th className="text-left py-2 font-mono">Length</th>
-            </tr>
-          </thead>
-          <tbody className="opacity-50">
-            <tr><td className="py-2">S</td><td>104cm</td><td>68cm</td></tr>
-            <tr><td className="py-2">M</td><td>108cm</td><td>70cm</td></tr>
-            <tr><td className="py-2">L</td><td>112cm</td><td>72cm</td></tr>
-            <tr><td className="py-2">XL</td><td>116cm</td><td>74cm</td></tr>
-          </tbody>
-        </table>
-      )
-    },
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-20">
+    <motion.div 
+      key={product.id}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-black text-white pt-28 pb-20 font-light">
 
-      {/* Breadcrumb */}
       <div className="px-6 md:px-12 mb-8 max-w-7xl mx-auto">
-        <nav className="text-[9px] font-mono uppercase tracking-widest text-white/30 flex items-center gap-2">
-          <Link to="/" className="hover:text-red-600 transition-colors">Home</Link>
+        <nav className="text-xs font-mono uppercase tracking-widest text-white/40 flex items-center gap-2">
+          <Link to="/" className="hover:text-red-500 transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/collection" className="hover:text-red-600 transition-colors">Collection</Link>
+          <Link to="/collection" className="hover:text-red-500 transition-colors">Collection</Link>
           <span>/</span>
-          <span className="text-white/60">{product.name}</span>
+          <span className="text-white/70">{product.name}</span>
         </nav>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 px-6 md:px-12 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 px-6 md:px-12 max-w-7xl mx-auto">
 
-        {/* LEFT — Images */}
-        <div className="space-y-3">
-          {/* Main Image */}
-          <div className="relative aspect-[3/4] bg-zinc-900 overflow-hidden group">
-            <img
-              src={product.images[selectedImage]}
-              alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
+        <motion.div 
+          className="space-y-4 sticky top-28 h-fit"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}>
+          <div className="relative aspect-[3/4] bg-zinc-900 overflow-hidden shadow-2xl shadow-black/30">
+            <AnimatePresence mode="wait">
+                <motion.img
+                  key={selectedImage}
+                  src={product.images[selectedImage]}
+                  alt={product.name}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="w-full h-full object-cover"
+                />
+            </AnimatePresence>
             {product.discount && (
-              <div className="absolute top-4 left-4 bg-red-600 text-white text-[9px] font-mono px-3 py-1">
+              <motion.div 
+                className="absolute top-4 left-4 bg-red-600 text-white text-xs font-mono px-3 py-1 tracking-wider"
+                initial={{y: -20, opacity: 0}} animate={{y: 0, opacity: 1}} transition={{delay: 1, duration: 0.5}}>
                 -{product.discount}%
-              </div>
+              </motion.div>
             )}
           </div>
 
-          {/* Thumbnails */}
           {product.images.length > 1 && (
             <div className="flex gap-2">
               {product.images.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`relative flex-shrink-0 w-20 h-24 overflow-hidden transition-all ${
-                    selectedImage === idx ? 'ring-1 ring-red-600' : 'opacity-40 hover:opacity-100'
-                  }`}
-                >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  className={`relative flex-shrink-0 w-20 h-24 overflow-hidden transition-all duration-300 ring-2 ${selectedImage === idx ? 'ring-red-500' : 'ring-transparent opacity-50 hover:opacity-100'}`}>
+                  <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
           )}
-        </div>
+        </motion.div>
 
-        {/* RIGHT — Info */}
-        <div className="space-y-8 lg:sticky lg:top-32 h-fit">
+        <motion.div 
+          className="space-y-10 lg:pt-8"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}>
 
-          {/* Name + Wishlist */}
           <div>
-            <p className="text-[9px] font-mono text-red-600 tracking-[0.4em] uppercase mb-3">
+            <p className="text-sm font-mono text-red-500 tracking-[0.3em] uppercase mb-4">
               {product.category}
             </p>
             <div className="flex items-start justify-between gap-4">
-              <h1 style={{fontFamily: "'Cormorant Garamond', serif"}}
-                className="text-4xl md:text-5xl font-light tracking-wide uppercase leading-tight">
+              <h1 className="text-4xl md:text-5xl font-normal tracking-wide uppercase leading-tight">
                 {product.name}
               </h1>
-              <button
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setIsWishlisted(!isWishlisted)}
-                className="mt-2 hover:text-red-600 transition-colors shrink-0"
-              >
-                <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-red-600 text-red-600' : ''}`} strokeWidth={1.5} />
-              </button>
+                className="mt-2 hover:text-red-500 transition-colors shrink-0">
+                <Heart className={`w-6 h-6 transition-all ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-white/50'}`} strokeWidth={1.5} />
+              </motion.button>
             </div>
           </div>
 
-          {/* Price */}
           <div className="flex items-baseline gap-4">
-            <span className="text-3xl font-mono text-red-500">
+            <span className="text-4xl font-mono text-red-500">
               ₹{product.price.toLocaleString()}
             </span>
             {product.originalPrice && (
-              <span className="text-lg line-through opacity-30 font-mono">
+              <span className="text-xl line-through opacity-40 font-mono">
                 ₹{product.originalPrice.toLocaleString()}
               </span>
             )}
           </div>
 
-          {/* Stock */}
-          <div className="flex items-center gap-2">
-            <span className={`w-1.5 h-1.5 rounded-full ${
-              product.stock > 10 ? 'bg-green-500' : 'bg-yellow-500'
-            }`} />
-            <span className="text-[9px] font-mono opacity-40 tracking-widest uppercase">
-              {product.stock > 10 ? 'In Stock' : `Only ${product.stock} left`}
-            </span>
-          </div>
-
-          {/* Size Selector */}
-          <div className="space-y-3">
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] opacity-40">
-              Select Size
-            </p>
-            <div className="flex flex-wrap gap-2">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <p className="text-sm font-mono uppercase tracking-[0.2em] opacity-60">Select Size</p>
+              <Link to="/size-guide" className="text-xs font-mono uppercase tracking-widest text-white/40 hover:text-white transition">Size Guide</Link>
+            </div>
+            <div className="flex flex-wrap gap-3">
               {product.sizes.map(size => (
-                <button
+                <motion.button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`px-5 py-3 text-[10px] font-mono uppercase tracking-widest border transition-all ${
-                    selectedSize === size
-                      ? 'border-red-600 text-red-600 bg-red-600/10'
-                      : 'border-white/20 hover:border-white/60'
-                  }`}
-                >
+                  className={`px-6 py-3 text-sm font-mono uppercase tracking-widest border transition-all duration-300 ${selectedSize === size ? 'border-red-500 text-red-500 bg-red-500/10' : 'border-white/20 hover:border-white/70'}`}
+                  whileTap={{ scale: 0.95 }}>
                   {size}
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
 
-          {/* Quantity */}
-          <div className="space-y-3">
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] opacity-40">Quantity</p>
-            <div className="flex items-center border border-white/20 w-fit">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-12 h-12 flex items-center justify-center hover:bg-white/5 transition-colors"
-              >
-                <Minus className="w-3 h-3" />
-              </button>
-              <span className="w-12 text-center text-sm font-mono">{quantity}</span>
-              <button
-                onClick={() => setQuantity(Math.min(5, quantity + 1))}
-                className="w-12 h-12 flex items-center justify-center hover:bg-white/5 transition-colors"
-              >
-                <Plus className="w-3 h-3" />
-              </button>
+          <div className="flex items-center gap-6">
+            <p className="text-sm font-mono uppercase tracking-[0.2em] opacity-60">Quantity</p>
+            <div className="flex items-center border border-white/20">
+              <motion.button whileTap={{scale: 0.9}} onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-12 h-12 flex items-center justify-center hover:bg-white/10 transition-colors"><Minus className="w-4 h-4" /></motion.button>
+              <span className="w-16 text-center text-lg font-mono">{quantity}</span>
+              <motion.button whileTap={{scale: 0.9}} onClick={() => setQuantity(Math.min(10, quantity + 1))} className="w-12 h-12 flex items-center justify-center hover:bg-white/10 transition-colors"><Plus className="w-4 h-4" /></motion.button>
             </div>
           </div>
 
-          {/* Add to Bag */}
-          <button
-            onClick={handleAddToCart}
-            disabled={!selectedSize}
-            className={`w-full py-5 text-[11px] font-mono uppercase tracking-[0.3em] transition-all duration-300 ${
-              selectedSize
-                ? 'bg-white text-black hover:bg-red-600 hover:text-white'
-                : 'bg-white/10 text-white/30 cursor-not-allowed'
-            }`}
-          >
-            {selectedSize ? 'Add to Bag' : 'Select a Size'}
-          </button>
-
-          {/* Trust Badges */}
-          <div className="grid grid-cols-3 gap-4 py-6 border-y border-white/5">
-            {[
-              { icon: 'M5 13l4 4L19 7', label: 'Free Shipping' },
-              { icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', label: 'Easy Returns' },
-              { icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', label: 'Secure Pay' },
-            ].map(badge => (
-              <div key={badge.label} className="text-center space-y-2">
-                <svg className="w-4 h-4 mx-auto opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={badge.icon} />
-                </svg>
-                <p className="text-[8px] font-mono opacity-30 uppercase tracking-wider">{badge.label}</p>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 gap-4">
+             <motion.button
+              onClick={handleBuyNow}
+              disabled={!selectedSize}
+              className={`w-full py-5 text-sm font-mono uppercase tracking-[0.3em] transition-all duration-300 relative overflow-hidden ${selectedSize ? 'bg-black text-white border border-white/20' : 'bg-white/10 text-white/40 cursor-not-allowed'}`}>
+                 <AnimatePresence mode="wait">
+                  <motion.span key={selectedSize ? 'buy' : 'select'} initial={{y: 20, opacity: 0}} animate={{y: 0, opacity: 1}} exit={{y: -20, opacity: 0}} transition={{duration: 0.2}}>{selectedSize ? 'Buy It Now' : 'Select a Size'}</motion.span>
+                </AnimatePresence>
+            </motion.button>
           </div>
 
-          {/* Accordion */}
-          <div className="space-y-0">
+          <div className="space-y-2">
             {accordionItems.map((item, idx) => (
-              <div key={idx} className="border-b border-white/5">
+              <div key={idx} className="border-b border-white/10">
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === idx ? null : idx)}
-                  className="w-full flex items-center justify-between py-4 hover:text-red-600 transition-colors"
-                >
-                  <span className="text-[10px] font-mono uppercase tracking-widest">{item.title}</span>
-                  {activeAccordion === idx
-                    ? <ChevronUp className="w-4 h-4 opacity-40" />
-                    : <ChevronDown className="w-4 h-4 opacity-40" />
-                  }
+                  className="w-full flex items-center justify-between py-5 hover:text-red-500 transition-colors">
+                  <span className="text-sm font-mono uppercase tracking-widest">{item.title}</span>
+                  <motion.div animate={{ rotate: activeAccordion === idx ? 180 : 0}} transition={{duration: 0.3}}><ChevronDown className="w-5 h-5 opacity-50" /></motion.div>
                 </button>
                 <AnimatePresence>
                   {activeAccordion === idx && (
@@ -276,10 +219,9 @@ export const ProductDetail = () => {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pb-4 text-[11px] font-mono opacity-40 leading-relaxed tracking-wide">
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="overflow-hidden">
+                      <div className="pb-6 text-sm font-mono opacity-60 leading-relaxed tracking-wide">
                         {item.content}
                       </div>
                     </motion.div>
@@ -289,8 +231,10 @@ export const ProductDetail = () => {
             ))}
           </div>
 
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
+
+export default ProductDetail;
